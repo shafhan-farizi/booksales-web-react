@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAuthors } from "../../../_services/authors";
+import { deleteAuthor, getAuthors } from "../../../_services/authors";
 
 export default function AdminAuthors() {
 	const [authors, setAuthors] = useState([]);
@@ -8,7 +8,7 @@ export default function AdminAuthors() {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const authorsData = await getAuthors()
+			const authorsData = await getAuthors();
 
 			setAuthors(authorsData.data);
 		};
@@ -19,6 +19,16 @@ export default function AdminAuthors() {
 	const toggleDropdown = (id) => {
 		setOpenDropdownId(openDropdownId === id ? null : id);
 	};
+
+	const handleDelete = async (id) => {
+		const confirmDelete = confirm("Are you sure want to delete this author?");
+
+		if (confirmDelete) {
+			await deleteAuthor(id);
+			setAuthors(authors.filter((author) => author.id !== id));
+		}
+	};
+
 	return (
 		<>
 			<section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -95,7 +105,10 @@ export default function AdminAuthors() {
 							<tbody>
 								{authors.length > 0 ? (
 									authors.map((author) => (
-										<tr key={author.id} className="border-b dark:border-gray-700">
+										<tr
+											key={author.id}
+											className="border-b dark:border-gray-700"
+										>
 											<th
 												scope="row"
 												className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -140,7 +153,7 @@ export default function AdminAuthors() {
 															</li>
 														</ul>
 														<div className="py-1">
-															<button className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+															<button onClick={() => handleDelete(author.id)} className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
 																Delete
 															</button>
 														</div>
