@@ -1,30 +1,15 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { logout, useDecodeToken } from "../_services/auth";
-import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminLayout() {
 	const navigate = useNavigate();
-	const token = localStorage.getItem("accessToken");
-	const decodedData = useDecodeToken(token);
-	const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+	const { user, logout } = useAuth();
 
-	useEffect(() => {
-		if (!token || !decodedData || !decodedData.success) {
-			navigate("/login");
-		}
+	const handleLogout = async () => {
+		await logout();
 
-		const role = userInfo.role;
-		if (role !== "admin" || !role) {
-			navigate("/");
-		}
-	}, [token, decodedData, navigate]);
-
-  const handleLogout = async () => {
-    if(token) {
-      await logout(token)
-      navigate('/login')
-    }
-  }
+		navigate("/login");
+	};
 
 	return (
 		<>
@@ -103,7 +88,7 @@ export default function AdminLayout() {
 								to={"/"}
 								className="bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
 							>
-								{userInfo.name}
+								{user?.name}
 							</Link>
 							<button
 								type="button"
@@ -125,10 +110,10 @@ export default function AdminLayout() {
 							>
 								<div className="py-3 px-4">
 									<span className="block text-sm font-semibold text-gray-900 dark:text-white">
-										Neil Sims
+										{user?.name}
 									</span>
 									<span className="block text-sm text-gray-900 truncate dark:text-white">
-										name@flowbite.com
+										{user?.email}
 									</span>
 								</div>
 								<ul
@@ -136,12 +121,12 @@ export default function AdminLayout() {
 									aria-labelledby="dropdown"
 								>
 									<li>
-										<Link
-											to={"#"}
-											className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+										<button
+											onClick={handleLogout}
+											className="w-full block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 										>
 											Sign out
-										</Link>
+										</button>
 									</li>
 								</ul>
 							</div>
@@ -311,7 +296,7 @@ export default function AdminLayout() {
 							</li>
 							<li>
 								<button
-                  onClick={handleLogout}
+									onClick={handleLogout}
 									className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 bg-red-200 hover:bg-red-100 group"
 								>
 									<span className="ml-3">Logout</span>

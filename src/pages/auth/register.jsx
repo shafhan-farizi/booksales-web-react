@@ -19,7 +19,7 @@ export default function Register() {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-    console.log(value)
+		console.log(value);
 		setFormData({
 			...formData,
 			[name]: value,
@@ -63,8 +63,8 @@ export default function Register() {
 									type="text"
 									name="fullname"
 									error={error?.fullname}
-                  placeholder="Aleandre Janrea"
-                  value={formData.fullname}
+									placeholder="Aleandre Janrea"
+									value={formData.fullname}
 									onChange={handleChange}
 								/>
 								<Input
@@ -72,8 +72,8 @@ export default function Register() {
 									type="text"
 									name="name"
 									error={error?.name}
-                  placeholder="Aleandre"
-                  value={formData.name}
+									placeholder="Aleandre"
+									value={formData.name}
 									onChange={handleChange}
 								/>
 								<Input
@@ -81,8 +81,8 @@ export default function Register() {
 									type="email"
 									name="email"
 									error={error?.email}
-                  placeholder="name@example.com"
-                  value={formData.email}
+									placeholder="name@example.com"
+									value={formData.email}
 									onChange={handleChange}
 								/>
 								<Input
@@ -90,8 +90,8 @@ export default function Register() {
 									type="password"
 									name="password"
 									error={error?.password}
-                  placeholder="********"
-                  value={formData.password}
+									placeholder="********"
+									value={formData.password}
 									onChange={handleChange}
 								/>
 								<div className="flex items-start">

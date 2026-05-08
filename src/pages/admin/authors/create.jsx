@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { createAuthor } from "../../../_services/authors";
 
 export default function AuthorCreate() {
+	const navigate = useNavigate();
+	
 	const [formData, setFormData] = useState({
 		name: "",
 		city: "",
 	});
-
-	const navigate = useNavigate();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;

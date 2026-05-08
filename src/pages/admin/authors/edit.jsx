@@ -4,13 +4,14 @@ import { showAuthor, updateAuthor } from "../../../_services/authors";
 
 export default function AuthorEdit() {
     const { id } = useParams()
+	const navigate = useNavigate();
+	
 	const [formData, setFormData] = useState({
 		name: "",
 		city: "",
         _method: 'PUT'
 	});
 
-	const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {

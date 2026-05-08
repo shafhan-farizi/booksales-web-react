@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login, useDecodeToken } from "../../_services/auth";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
+  
   const [formData, setFormData] = useState({
     email: 'customer@example.com',
     password: 'customer123'
   })
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-
-  const token = localStorage.getItem('accessToken')
-  const decodedData = useDecodeToken(token)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -30,23 +29,14 @@ export default function Login() {
 
     try {
       const response = await login(formData)
-      localStorage.setItem('accessToken', response.token)
-      localStorage.setItem('userInfo', JSON.stringify(response.user))
 
-      return navigate(response.user.role === 'admin' ? '/admin' : '/')
+      return navigate(response.role === 'admin' ? '/admin' : '/')
     } catch (error) {
       setError(error?.response?.data?.message)
     } finally {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    if(token && decodedData && decodedData.success) {
-      navigate('/admin')
-    }
-  }, [token, decodedData, navigate])
-
 
   return (
     <>

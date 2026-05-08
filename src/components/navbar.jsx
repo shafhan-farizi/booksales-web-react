@@ -1,17 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../_services/auth";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
-  const navigate = useNavigate()
-	const token = localStorage.getItem("accessToken");
-	const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+	const navigate = useNavigate();
+	const { user, logout } = useAuth();
 
-  const handleLogout = async () => {
-    if(token) {
-      await logout(token)
-    }
-    navigate('/login')
-  }
+	const token = localStorage.getItem("accessToken");
+
+	const handleLogout = async () => {
+		await logout(token);
+
+		navigate("/login");
+	};
 
 	return (
 		<>
@@ -29,16 +29,16 @@ export default function Navbar() {
 							</span>
 						</Link>
 						<div className="flex items-center lg:order-2">
-							{token && userInfo ? (
+							{token && user ? (
 								<>
 									<Link
 										to={"/"}
 										className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
 									>
-										{userInfo.name}
+										{user.name}
 									</Link>
 									<button
-                    onClick={handleLogout}
+										onClick={handleLogout}
 										className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800"
 									>
 										Logout
